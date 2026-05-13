@@ -1,0 +1,46 @@
+import pygame
+pygame.init()
+
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Události a ovládání")
+clock = pygame.time.Clock()
+
+# Pozice a vlastnosti čtverce
+x, y = 400, 300
+size = 50
+speed = 0.1
+color = (0, 200, 100)
+
+running = True
+while running:
+    clock.tick(60)
+
+    # 1. Událostní zpracování
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Kliknutím přesuň čtverec na pozici myši
+            x, y = event.pos[0] - size // 2, event.pos[1] - size // 2
+
+    # 2. Průběžné držení kláves (plynulý pohyb)
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        x -= speed
+    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        x += speed
+    if keys[pygame.K_UP] or keys[pygame.K_w]:
+        y -= speed
+    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        y += speed
+
+    # 3. Vykreslení
+    screen.fill((60, 60, 60))
+    pygame.draw.rect(screen, color, (x, y, size, size))
+    pygame.display.flip()
+
+pygame.quit()
